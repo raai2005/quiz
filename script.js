@@ -261,7 +261,7 @@ function getResultMessage(percentage) {
 }
 
 function shareResult(percentage) {
-  const text = `I just scored ${percentage}% on the Dynamic Quiz! Can you beat my score? 🎯`;
+  const text = `I just scored ${percentage}% on the BrainBrust Quiz! Can you beat my score? 🎯`;
   if (navigator.share) {
     navigator.share({
       title: 'My Quiz Result',
