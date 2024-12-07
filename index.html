@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Quiz with Topics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        @media (max-width: 640px) {
+            body {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <!-- Add completion modal -->
+    <div id="completion-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-0" id="modal-content">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-blue-600 mb-4">🎉 Congratulations! 🎉</h2>
+                <p class="text-xl text-gray-700 mb-6">You've completed the quiz!</p>
+                <button onclick="location.reload()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+                    Try Another Quiz
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="quiz-container glass-effect rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-2xl w-full animate__animated animate__fadeIn">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-4 floating">Dynamic Quiz</h1>
+            <p class="text-base sm:text-lg text-gray-700 animate__animated animate__fadeIn animate__delay-1s">Ready to challenge yourself? Let's begin! 🚀</p>
+        </header>
+
+        <div class="setup space-y-6 animate__animated animate__fadeInUp animate__delay-1s">
+            <div class="input-group">
+                <label for="topics" class="block text-sm font-medium text-gray-700 mb-2">Choose a Topic:</label>
+                <select id="topics" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="9">General Knowledge</option>
+                    <option value="11">Entertainment: Books</option>
+                    <option value="12">Entertainment: Film</option>
+                    <option value="13">Entertainment: Music</option>
+                    <option value="14">Entertainment: Musicals & Theatres</option>
+                    <option value="15">Entertainment: Television</option>
+                    <option value="16">Entertainment: Video Games</option>
+                    <option value="17">Entertainment: Board Games</option>
+                    <option value="17">Science & Nature</option>
+                    <option value="18">Science: Computers</option>
+                    <option value="19">Science: Mathematics</option>
+                    <option value="20">Mythology</option>
+                    <option value="21">Sports</option>
+                    <option value="22">Geography</option>
+                    <option value="23">History</option>
+                    <option value="24">Politics</option>
+                    <option value="25">Art</option>
+                    <option value="26">Celebrities</option>
+                    <option value="27">Animals</option>
+                    <option value="28">Vehicles</option>
+                    <option value="29">Entertainment: Comics</option>
+                    <option value="30">Science: Gadgets</option>
+                    <option value="31">Entertainment: Japanese Anime & Manga</option>
+                    <option value="32">Entertainment: Cartoon & Animations</option>
+                </select>
+            </div>
+
+            <!-- Add new dropdowns for difficulty and type -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="input-group">
+                    <label for="difficulty" class="block text-sm font-medium text-gray-700 mb-2">Difficulty Level:</label>
+                    <select id="difficulty" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="easy">Easy</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="questionType" class="block text-sm font-medium text-gray-700 mb-2">Question Type:</label>
+                    <select id="questionType" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="multiple">Multiple Choice</option>
+                        <option value="boolean">True/False</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Number of Questions:</label>
+                <div class="question-controls flex items-center justify-center space-x-4">
+                    <button id="decrement" class="w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center">-</button>
+                    <span id="question-count" class="text-xl font-semibold text-gray-700">5</span>
+                    <button id="increment" class="w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center">+</button>
+                </div>
+            </div>
+        </div>
+
+        <button id="start-btn" class="w-full mt-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold rounded-xl transition-all duration-300 transform hover:scale-105 shine-effect">
+            Start Your Adventure 🎮
+        </button>
+
+        <section class="quiz hidden mt-8">
+            <div id="question" class="text-lg font-semibold text-gray-800 mb-6"></div>
+            <div id="options" class="space-y-3"></div>
+            <button id="submit-btn" class="hidden w-full mt-6 py-3 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors duration-200">
+                Submit Answer
+            </button>
+            <p id="result" class="hidden mt-4 text-lg font-semibold"></p>
+        </section>
+
+        <footer class="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-500">
+            <p>&copy; 2024 Quiz App</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
