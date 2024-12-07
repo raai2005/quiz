@@ -148,7 +148,7 @@ function handleSubmit() {
     
     document.querySelectorAll('input[type="radio"]').forEach(input => input.disabled = true);
 
-    // Updated color classes for better visibility
+    // Show answer highlighting
     allLabels.forEach(label => {
       const answerText = label.querySelector('span').textContent;
       if (answerText === correctAnswer) {
@@ -173,41 +173,19 @@ function handleSubmit() {
     }
 
     resultDiv.classList.remove("hidden");
-    
+    document.querySelector("#submit-btn").disabled = true;
+
+    // Handle timer and next question
     if (!isLastQuestion) {
-      timerDiv.classList.remove("hidden");
-      timerDiv.style.opacity = "1";
-      let timeLeft = 5;
-      const timerBar = document.querySelector("#timer-bar div");
-      const startTime = Date.now();
-      const duration = 5000; // 5 seconds in milliseconds
-
-      const updateTimer = () => {
-        const elapsed = Date.now() - startTime;
-        const remaining = duration - elapsed;
-        const progress = (remaining / duration) * 100;
-        
-        if (remaining <= 0) {
-          clearInterval(timerInterval);
-          currentQuestionIndex++;
-          loadQuestion(questions[currentQuestionIndex]);
-          return;
-        }
-
-        timeLeft = Math.ceil(remaining / 1000);
-        timerDiv.textContent = `Next question in ${timeLeft} seconds...`;
-        timerBar.style.width = `${progress}%`;
-      };
-
-      const timerInterval = setInterval(updateTimer, 50); // Update more frequently for smoother animation
-      updateTimer(); // Initial update
+      // ... existing timer code ...
     } else {
+      // On last question, show result after a delay to allow seeing the answer
       setTimeout(() => {
         const percentage = Math.round((score / questions.length) * 100);
         const resultMessage = getResultMessage(percentage);
         showResultScreen(percentage, score, questions.length, resultMessage);
         createConfetti();
-      }, 2000);
+      }, 3000); // Increased delay to 3 seconds for last question
     }
   } else {
     alert("Please select an answer!");
