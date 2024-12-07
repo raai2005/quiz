@@ -99,6 +99,20 @@
     z-index: 20;
     transform-origin: left;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    position: relative;
+    width: 100%;
+    height: 4px;
+    background: #f3f4f6;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+#timer-bar div {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to right, #9333ea, #ec4899);
+    transition: width 1s linear;
 }
 
 #result {
@@ -107,17 +121,28 @@
 }
 
 #timer-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 1rem;
     z-index: 20;
 }
 
+/* Remove or comment out these timer text styles
 #timer {
     z-index: 10;
     position: relative;
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(5px);
     transition: opacity 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: #374151;
+    margin-top: 0.5rem;
+    text-align: center;
 }
 
 .quiz-container:hover #timer {
     opacity: 1 !important;
 }
+*/

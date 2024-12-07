@@ -99,9 +99,6 @@ function loadQuestion(data) {
           Submit Answer
         </button>
         <div id="result" class="mt-4 text-center font-bold hidden"></div>
-        ${!isLastQuestion ? `
-          <div id="timer" class="mt-2 text-center text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 opacity-0 transition-opacity duration-300"></div>
-        ` : ''}
       </div>
     </div>
   `;
@@ -177,15 +174,30 @@ function handleSubmit() {
 
     // Handle timer and next question
     if (!isLastQuestion) {
-      // ... existing timer code ...
+        const timerBar = document.querySelector("#timer-bar div");
+        let timeLeft = 3;
+
+        timerBar.style.width = "100%";
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            const percentage = (timeLeft / 3) * 100;
+            timerBar.style.width = `${percentage}%`;
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                currentQuestionIndex++;
+                loadQuestion(questions[currentQuestionIndex]);
+            }
+        }, 1000);
     } else {
-      // On last question, show result after a delay to allow seeing the answer
-      setTimeout(() => {
-        const percentage = Math.round((score / questions.length) * 100);
-        const resultMessage = getResultMessage(percentage);
-        showResultScreen(percentage, score, questions.length, resultMessage);
-        createConfetti();
-      }, 3000); // Increased delay to 3 seconds for last question
+        // On last question, show result after a delay to allow seeing the answer
+        setTimeout(() => {
+            const percentage = Math.round((score / questions.length) * 100);
+            const resultMessage = getResultMessage(percentage);
+            showResultScreen(percentage, score, questions.length, resultMessage);
+            createConfetti();
+        }, 3000); // Increased delay to 3 seconds for last question
     }
   } else {
     alert("Please select an answer!");
